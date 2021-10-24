@@ -1,0 +1,13 @@
+built/
+bower_components/
+node_modules/
+.pulp-cache/
+.vscode/
+.cache/
+.spago/
+output/
+dist/
+.psc*
+.purs*
+.psa*
+node_modules
