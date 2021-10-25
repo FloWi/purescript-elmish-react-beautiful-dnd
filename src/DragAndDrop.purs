@@ -8,7 +8,7 @@ import Debug (spy)
 import Effect.Aff (Aff)
 import Effect.Aff.Class (class MonadAff, liftAff)
 import Effect.Class (liftEffect)
-import Elmish (ComponentDef, Transition, fork, handle)
+import Elmish (ComponentDef, ReactElement, Transition, fork, handle)
 import Elmish.HTML.Styled as H
 import MyComponent (DragEndResult, dragDropContext, droppable)
 
@@ -101,17 +101,22 @@ def =
                   [ H.p "" $ show song.songId <> " " <> " " <> song.title
                   , H.button_ "btn btn-primary mb-2" { onClick: dispatch $ AddSongToPlaylist song } "Add Song"
                   ]
+    renderPlaylist :: Array PlaylistEntry -> ReactElement
     renderPlaylist playlistEntries =
       dragDropContext { onDragEnd: handle dispatch \e -> DragAndDropEnd (spy "DragEnd" e) }
-        -- $ droppable { droppableId: "playlist-droppable" }
-        $ playlistEntries
-        # mapWithIndex \idx playlistEntry ->
-            H.div "card"
-              $ H.div "card-body"
-              $
-                [ H.p "" $ show playlistEntry.song.songId <> " " <> " " <> playlistEntry.song.title
-                , H.button_ "btn btn-primary mb-2" { onClick: dispatch $ RemovePlaylistEntry idx } "Remove Song"
-                ]
+        $ droppable { droppableId: "playlist-droppable" } \{ provided, snapshot } -> H.text "Hello!" -- renderDroppableContent provided snapshot }
+
+      where
+      renderDroppableContent provided snapshot =
+        H.div ""
+          $ playlistEntries
+          # mapWithIndex \idx playlistEntry ->
+              H.div "card"
+                $ H.div "card-body"
+                $
+                  [ H.p "" $ show playlistEntry.song.songId <> " " <> " " <> playlistEntry.song.title
+                  , H.button_ "btn btn-primary mb-2" { onClick: dispatch $ RemovePlaylistEntry idx } "Remove Song"
+                  ]
 
 generateUUID :: Aff UUID
 generateUUID =

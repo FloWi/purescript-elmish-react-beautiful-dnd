@@ -4,4 +4,6 @@ const Droppable = require('react-beautiful-dnd').Droppable
 
 
 exports.dragDropContextImpl = DragDropContext;
-exports.droppableImpl = Droppable;
+
+exports.droppableImpl = ({ droppableId, isDropDisabled, renderFn }) =>
+  React.createElement(Droppable, { droppableId, isDropDisabled }, renderFn)
